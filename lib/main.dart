@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lunar/lunar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'APP title',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'HS-LIKE'),
     );
   }
 }
@@ -55,7 +56,35 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  String _now = '';
+  String _result = 'Not start yet';
+  String _desc = '';
+
+  var hour12 = [
+    '子',
+    '丑',
+    '寅',
+    '卯',
+    '辰',
+    '巳',
+    '午',
+    '未',
+    '申',
+    '酉',
+    '戌',
+    '亥',
+    '异常'
+  ];
+  var liu = ['大安', '流连', '速喜', '赤口', '小吉', '空亡', '异常'];
+  var liuDesc = [
+    '健康平安，事情发展顺利，心想事成',
+    '流连忘返，事情不顺利，不会有结果，要等的人也不会来，此时不宜轻举妄动',
+    '很快会有喜讯传来，会有好结果',
+    '口舌是非，容易遇到小人，尤其不利于谈事情',
+    '吉祥如意，事情顺利',
+    '诸事不顺，会有坏的结果，及时止损',
+    '异常'
+  ];
 
   void _incrementCounter() {
     setState(() {
@@ -64,12 +93,67 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
+      calculate();
     });
+  }
+
+  void calculate() {
+    DateTime now = DateTime.now();
+    Lunar date = Lunar.fromDate(DateTime.now());
+    var hourIndex = getChineseHour(now);
+    var chineseHour = hour12[hourIndex];
+    _now =
+        '${date.getMonthInChinese()}月${date.getDayInChinese()}日$chineseHour时';
+
+    var first = date.getMonth() % 6 - 1;
+    var second = date.getDay() % 6 - 1;
+    var third = hourIndex % 6;
+    var index = (first + second + third) % 6;
+    _result = liu[index];
+    _desc = liuDesc[index];
+  }
+
+  String getChineseCalendar() {
+    DateTime now = DateTime.now();
+    var chineseHour = hour12[getChineseHour(now)];
+    Lunar date = Lunar.fromDate(DateTime.now());
+    return '${date.getMonthInChinese()}月${date.getDayInChinese()}日$chineseHour时';
+  }
+
+  int getChineseHour(DateTime now) {
+    if (now.hour >= 23 && now.hour <= 24) {
+      return 0;
+    } else if (now.hour >= 0 && now.hour < 1) {
+      return 0;
+    } else if (now.hour >= 1 && now.hour < 3) {
+      return 1;
+    } else if (now.hour >= 3 && now.hour < 5) {
+      return 2;
+    } else if (now.hour >= 5 && now.hour < 7) {
+      return 3;
+    } else if (now.hour >= 7 && now.hour < 9) {
+      return 4;
+    } else if (now.hour >= 9 && now.hour < 11) {
+      return 5;
+    } else if (now.hour >= 11 && now.hour < 13) {
+      return 6;
+    } else if (now.hour >= 13 && now.hour < 15) {
+      return 7;
+    } else if (now.hour >= 15 && now.hour < 17) {
+      return 8;
+    } else if (now.hour >= 17 && now.hour < 19) {
+      return 9;
+    } else if (now.hour >= 19 && now.hour < 21) {
+      return 10;
+    } else if (now.hour >= 21 && now.hour < 23) {
+      return 11;
+    }
+    return 12;
   }
 
   @override
   Widget build(BuildContext context) {
+    _now = getChineseCalendar();
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -103,14 +187,31 @@ class _MyHomePageState extends State<MyHomePage> {
           // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
           // action in the IDE, or press "p" in the console), to see the
           // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            Text(
+              '不诚不占，不义不占，不疑不占',
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
             Text(
-              '$_counter',
+              _now,
+              style: const TextStyle(color: Colors.blueAccent, fontSize: 30),
+            ),
+            Text(
+              '测算结果：',
               style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            Text(
+              _result,
+              style: const TextStyle(color: Colors.blueAccent, fontSize: 30),
+            ),
+            Text(
+              '结果解析：',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            Text(
+              _desc,
+              style: const TextStyle(color: Colors.blueAccent, fontSize: 30),
             ),
           ],
         ),
