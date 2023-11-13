@@ -153,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.fromLTRB(0, 160, 0, 0),
+              margin: const EdgeInsets.fromLTRB(0, 120, 0, 0),
               child: FilledButton(
                 onPressed: _calculate,
                 style: ButtonStyle(
