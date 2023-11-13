@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _calculate() {
     setState(() {
-      DateTime now = DateTime.now().add(const Duration(hours: 2));
+      DateTime now = DateTime.now();
       Lunar date = Lunar.fromDate(now);
       var hourIndex = getChineseHour(now.hour);
       var chineseHour = hour12[hourIndex];
@@ -108,14 +108,14 @@ class _MyHomePageState extends State<MyHomePage> {
               margin: const EdgeInsets.fromLTRB(0, 40, 0, 0),
               child: const Text(
                 '不诚不占，不义不占，不疑不占',
-                style: TextStyle(fontSize: 24),
+                style: TextStyle(fontSize: 22),
               ),
             ),
             Container(
               margin: const EdgeInsets.fromLTRB(0, 40, 0, 20),
               child: Text(
                 _now,
-                style: const TextStyle(fontSize: 24),
+                style: const TextStyle(fontSize: 22),
               ),
             ),
             Container(
@@ -124,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
               margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
               child: Text(
                 _result,
-                style: const TextStyle(fontSize: 24),
+                style: const TextStyle(fontSize: 22),
               ),
             ),
             Container(
@@ -132,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: Text(
                 _desc,
-                style: const TextStyle(fontSize: 24, height: 1.5),
+                style: const TextStyle(fontSize: 22, height: 1.5),
               ),
             ),
             Container(
@@ -141,9 +141,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: _calculate,
                 style: const ButtonStyle(
                   alignment: Alignment.center,
-                  padding: MaterialStatePropertyAll(EdgeInsets.fromLTRB(160, 14, 160, 16))
+                  padding: MaterialStatePropertyAll(EdgeInsets.fromLTRB(100, 14, 100, 16))
                 ),
-                child: const Text('测算', style: TextStyle(fontSize: 24)),
+                child: const Text('测算', style: TextStyle(fontSize: 22)),
               ),
             )
           ],
