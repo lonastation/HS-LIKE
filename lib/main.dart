@@ -32,8 +32,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String _now = '';
-  String _result = '';
-  String _desc = '';
+  String _result = 'Not Start Yet';
+  String _desc = '动心起念即为征兆';
 
   var hour12 = [
     '子',
@@ -100,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Colors.white.withOpacity(0.1),
         title: Text(widget.title),
-        foregroundColor: Colors.white,
+        foregroundColor: Colors.yellowAccent,
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -143,6 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Container(
               decoration: BoxDecoration(color: Colors.yellow.withOpacity(0.8)),
+              alignment: Alignment.bottomLeft,
               margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
               padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
               child: Text(
