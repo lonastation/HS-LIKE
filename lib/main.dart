@@ -99,56 +99,32 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void calculate() {
     DateTime now = DateTime.now();
-    Lunar date = Lunar.fromDate(DateTime.now());
-    var hourIndex = getChineseHour(now);
+    Lunar date = Lunar.fromDate(now);
+    var hourIndex = getChineseHour(now.hour);
     var chineseHour = hour12[hourIndex];
-    _now =
-        '${date.getMonthInChinese()}月${date.getDayInChinese()}日$chineseHour时';
-
     var first = date.getMonth() % 6 - 1;
     var second = date.getDay() % 6 - 1;
     var third = hourIndex % 6;
     var index = (first + second + third) % 6;
+    _now =
+        wrapDate(date.getMonthInChinese(), date.getDayInChinese(), chineseHour);
     _result = liu[index];
     _desc = liuDesc[index];
   }
 
   String getChineseCalendar() {
     DateTime now = DateTime.now();
-    var chineseHour = hour12[getChineseHour(now)];
-    Lunar date = Lunar.fromDate(DateTime.now());
-    return '${date.getMonthInChinese()}月${date.getDayInChinese()}日$chineseHour时';
+    var chineseHour = hour12[getChineseHour(now.hour)];
+    Lunar date = Lunar.fromDate(now);
+    return wrapDate(date.getMonthInChinese(), date.getDayInChinese(), chineseHour);
   }
 
-  int getChineseHour(DateTime now) {
-    if (now.hour >= 23 && now.hour <= 24) {
-      return 0;
-    } else if (now.hour >= 0 && now.hour < 1) {
-      return 0;
-    } else if (now.hour >= 1 && now.hour < 3) {
-      return 1;
-    } else if (now.hour >= 3 && now.hour < 5) {
-      return 2;
-    } else if (now.hour >= 5 && now.hour < 7) {
-      return 3;
-    } else if (now.hour >= 7 && now.hour < 9) {
-      return 4;
-    } else if (now.hour >= 9 && now.hour < 11) {
-      return 5;
-    } else if (now.hour >= 11 && now.hour < 13) {
-      return 6;
-    } else if (now.hour >= 13 && now.hour < 15) {
-      return 7;
-    } else if (now.hour >= 15 && now.hour < 17) {
-      return 8;
-    } else if (now.hour >= 17 && now.hour < 19) {
-      return 9;
-    } else if (now.hour >= 19 && now.hour < 21) {
-      return 10;
-    } else if (now.hour >= 21 && now.hour < 23) {
-      return 11;
-    }
-    return 12;
+  String wrapDate(String month, String day, String hour) {
+    return '$month月$day日$hour时';
+  }
+
+  int getChineseHour(int hour) {
+    return ((hour + 1) ~/ 2) % 12;
   }
 
   @override
