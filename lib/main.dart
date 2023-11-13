@@ -32,7 +32,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String _now = '';
-  String _result = 'Not start yet';
+  String _result = '';
   String _desc = '';
 
   var hour12 = [
@@ -96,54 +96,73 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     _now = getChineseCalendar();
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Colors.white.withOpacity(0.1),
         title: Text(widget.title),
+        foregroundColor: Colors.white,
       ),
-      body: Center(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage("images/bg-hand.jpg"),
+              fit: BoxFit.fill,
+              ),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              margin: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+              margin: const EdgeInsets.fromLTRB(0, 140, 0, 0),
               child: const Text(
                 '不诚不占，不义不占，不疑不占',
-                style: TextStyle(fontSize: 22),
+                style: TextStyle(color: Colors.yellowAccent, fontSize: 22),
               ),
             ),
             Container(
-              margin: const EdgeInsets.fromLTRB(0, 40, 0, 20),
+              decoration:
+                  BoxDecoration(color: Colors.redAccent.withOpacity(0.8)),
+              alignment: Alignment.bottomLeft,
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+              margin: const EdgeInsets.fromLTRB(20, 30, 20, 0),
               child: Text(
                 _now,
-                style: const TextStyle(fontSize: 22),
+                style: const TextStyle(color: Colors.white, fontSize: 22),
               ),
             ),
             Container(
+              decoration: BoxDecoration(color: Colors.yellow.withOpacity(0.8)),
               alignment: Alignment.bottomLeft,
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-              margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+              margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
               child: Text(
                 _result,
-                style: const TextStyle(fontSize: 22),
+                style: const TextStyle(color: Colors.red, fontSize: 22),
               ),
             ),
             Container(
-              margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              decoration: BoxDecoration(color: Colors.yellow.withOpacity(0.8)),
+              margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
               child: Text(
                 _desc,
-                style: const TextStyle(fontSize: 22, height: 1.5),
+                style: const TextStyle(
+                    color: Colors.red, fontSize: 22, height: 1.5),
               ),
             ),
             Container(
-              margin: const EdgeInsets.fromLTRB(0, 80, 0, 0),
+              margin: const EdgeInsets.fromLTRB(0, 160, 0, 0),
               child: FilledButton(
                 onPressed: _calculate,
-                style: const ButtonStyle(
-                  alignment: Alignment.center,
-                  padding: MaterialStatePropertyAll(EdgeInsets.fromLTRB(100, 14, 100, 16))
-                ),
-                child: const Text('测算', style: TextStyle(fontSize: 22)),
+                style: ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(
+                        Colors.redAccent.withOpacity(0.9)),
+                    alignment: Alignment.center,
+                    padding: const MaterialStatePropertyAll(
+                        EdgeInsets.fromLTRB(100, 14, 100, 16))),
+                child: const Text('测算',
+                    style: TextStyle(color: Colors.white, fontSize: 22)),
               ),
             )
           ],
