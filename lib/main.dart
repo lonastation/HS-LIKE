@@ -100,12 +100,12 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Colors.white.withOpacity(0.1),
         title: Text(widget.title),
-        foregroundColor: Colors.white,
+        titleTextStyle: const TextStyle(color: Colors.black),
       ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/bg-tarot.jpg"),
+            image: AssetImage("images/bg-a1.gif"),
             fit: BoxFit.fitHeight,
           ),
         ),
@@ -113,50 +113,77 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              margin: const EdgeInsets.fromLTRB(0, 200, 0, 0),
+              margin: const EdgeInsets.fromLTRB(0, 190, 0, 0),
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-              child: Text(
-                '不诚不占，不义不占，不疑不占',
-                style: TextStyle(
-                    color: Colors.purple.shade50.withOpacity(0.4),
-                    fontSize: 22),
-              ),
+              child: ShaderMask(
+                  shaderCallback: (Rect bounds) {
+                    return LinearGradient(
+                      colors: [
+                        Colors.purpleAccent.withOpacity(0.7),
+                        Colors.blueAccent.withOpacity(0.7)
+                      ],
+                    ).createShader(Offset.zero & bounds.size);
+                  },
+                  child: const Text(
+                    '不诚不占，不义不占，不疑不占',
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  )),
             ),
             Container(
-              decoration: BoxDecoration(color: Colors.black.withOpacity(0.4)),
-              alignment: Alignment.bottomLeft,
-              margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: Text(
-                _now,
-                style:
-                    const TextStyle(color: Colors.yellowAccent, fontSize: 22),
-              ),
-            ),
+                decoration: BoxDecoration(color: Colors.white.withOpacity(0.1)),
+                alignment: Alignment.center,
+                margin: const EdgeInsets.fromLTRB(20, 70, 20, 0),
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                child: ShaderMask(
+                  shaderCallback: (Rect bounds) {
+                    return const LinearGradient(
+                      colors: [Colors.orangeAccent, Colors.greenAccent],
+                    ).createShader(Offset.zero & bounds.size);
+                  },
+                  child: Text(_now,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      )),
+                )),
             Container(
-              decoration: BoxDecoration(color: Colors.black.withOpacity(0.4)),
-              alignment: Alignment.bottomLeft,
-              margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: Text(
-                _result,
-                style:
-                    const TextStyle(color: Colors.yellowAccent, fontSize: 22),
-              ),
-            ),
+                decoration: BoxDecoration(color: Colors.white.withOpacity(0.1)),
+                alignment: Alignment.center,
+                margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                child: ShaderMask(
+                  shaderCallback: (Rect bounds) {
+                    return LinearGradient(
+                      colors: [Colors.orange.shade50, Colors.deepOrange],
+                    ).createShader(Offset.zero & bounds.size);
+                  },
+                  child: Text(_result,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      )),
+                )),
             Container(
-              decoration: BoxDecoration(color: Colors.black.withOpacity(0.4)),
-              alignment: Alignment.bottomLeft,
-              margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: Text(
-                _desc,
-                style: const TextStyle(
-                    color: Colors.yellowAccent, fontSize: 22, height: 1.5),
-              ),
-            ),
+                decoration: BoxDecoration(color: Colors.white.withOpacity(0.1)),
+                alignment: Alignment.center,
+                margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                child: ShaderMask(
+                  shaderCallback: (Rect bounds) {
+                    return const LinearGradient(
+                      colors: [Colors.lightBlueAccent, Colors.purpleAccent],
+                    ).createShader(Offset.zero & bounds.size);
+                  },
+                  child: Text(
+                    _desc,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                )),
             Container(
-              margin: const EdgeInsets.fromLTRB(0, 60, 0, 0),
+              margin: const EdgeInsets.fromLTRB(0, 100, 0, 0),
               child: FilledButton(
                 onPressed: _calculate,
                 style: ButtonStyle(
@@ -164,9 +191,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         Colors.deepPurple.withOpacity(0.9)),
                     alignment: Alignment.center,
                     padding: const MaterialStatePropertyAll(
-                        EdgeInsets.fromLTRB(100, 14, 100, 16))),
+                        EdgeInsets.fromLTRB(80, 12, 80, 12))),
                 child: const Text('测算',
-                    style: TextStyle(color: Colors.white, fontSize: 22)),
+                    style: TextStyle(color: Colors.white, fontSize: 20)),
               ),
             )
           ],
