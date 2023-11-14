@@ -100,56 +100,58 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Colors.white.withOpacity(0.1),
         title: Text(widget.title),
-        foregroundColor: Colors.yellowAccent,
+        foregroundColor: Colors.white,
       ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage("images/bg-hand.jpg"),
-              fit: BoxFit.fill,
-              ),
+            image: AssetImage("images/bg-tarot.jpg"),
+            fit: BoxFit.fitHeight,
+          ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
+              decoration: BoxDecoration(color: Colors.purple.withOpacity(0.2)),
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
               margin: const EdgeInsets.fromLTRB(0, 140, 0, 0),
               child: const Text(
                 '不诚不占，不义不占，不疑不占',
-                style: TextStyle(color: Colors.yellowAccent, fontSize: 22),
+                style: TextStyle(color: Colors.white, fontSize: 22),
               ),
             ),
             Container(
-              decoration:
-                  BoxDecoration(color: Colors.redAccent.withOpacity(0.8)),
+              decoration: BoxDecoration(color: Colors.black.withOpacity(0.4)),
               alignment: Alignment.bottomLeft,
-              padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+              padding: const EdgeInsets.fromLTRB(10, 12, 10, 12),
               margin: const EdgeInsets.fromLTRB(20, 30, 20, 0),
               child: Text(
                 _now,
-                style: const TextStyle(color: Colors.white, fontSize: 22),
+                style:
+                    const TextStyle(color: Colors.yellowAccent, fontSize: 22),
               ),
             ),
             Container(
-              decoration: BoxDecoration(color: Colors.yellow.withOpacity(0.8)),
+              decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
               alignment: Alignment.bottomLeft,
-              padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+              padding: const EdgeInsets.fromLTRB(10, 12, 10, 12),
               margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
               child: Text(
                 _result,
-                style: const TextStyle(color: Colors.red, fontSize: 22),
+                style:
+                    const TextStyle(color: Colors.yellowAccent, fontSize: 22),
               ),
             ),
             Container(
-              decoration: BoxDecoration(color: Colors.yellow.withOpacity(0.8)),
+              decoration: BoxDecoration(color: Colors.black.withOpacity(0.6)),
               alignment: Alignment.bottomLeft,
               margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-              padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+              padding: const EdgeInsets.fromLTRB(10, 12, 10, 12),
               child: Text(
                 _desc,
                 style: const TextStyle(
-                    color: Colors.red, fontSize: 22, height: 1.5),
+                    color: Colors.yellowAccent, fontSize: 22, height: 1.5),
               ),
             ),
             Container(
@@ -157,8 +159,8 @@ class _MyHomePageState extends State<MyHomePage> {
               child: FilledButton(
                 onPressed: _calculate,
                 style: ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(
-                        Colors.redAccent.withOpacity(0.9)),
+                    backgroundColor:
+                        MaterialStatePropertyAll(Colors.white.withOpacity(0.2)),
                     alignment: Alignment.center,
                     padding: const MaterialStatePropertyAll(
                         EdgeInsets.fromLTRB(100, 14, 100, 16))),
