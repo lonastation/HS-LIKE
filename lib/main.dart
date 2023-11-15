@@ -98,9 +98,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.white.withOpacity(0.1),
+        backgroundColor: Colors.black.withOpacity(0.1),
         title: Text(widget.title),
-        titleTextStyle: const TextStyle(color: Colors.black),
+        titleTextStyle: const TextStyle(color: Colors.white),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -109,89 +109,97 @@ class _MyHomePageState extends State<MyHomePage> {
             fit: BoxFit.fitHeight,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              margin: const EdgeInsets.fromLTRB(0, 190, 0, 0),
-              padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-              child: ShaderMask(
-                  shaderCallback: (Rect bounds) {
-                    return LinearGradient(
-                      colors: [
-                        Colors.purpleAccent.withOpacity(0.7),
-                        Colors.blueAccent.withOpacity(0.7)
-                      ],
-                    ).createShader(Offset.zero & bounds.size);
-                  },
-                  child: const Text(
-                    '不诚不占，不义不占，不疑不占',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+        child: Stack(
+          children: [
+            ListView(children: [
+              Container(
+                alignment: Alignment.center,
+                margin: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+                padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                child: ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return LinearGradient(
+                        colors: [
+                          Colors.purpleAccent.withOpacity(0.7),
+                          Colors.blueAccent.withOpacity(0.7)
+                        ],
+                      ).createShader(Offset.zero & bounds.size);
+                    },
+                    child: const Text(
+                      '不诚不占，不义不占，不疑不占',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    )),
+              ),
+              Container(
+                  decoration:
+                      BoxDecoration(color: Colors.white.withOpacity(0.1)),
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.fromLTRB(20, 70, 20, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  child: ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return const LinearGradient(
+                        colors: [Colors.orangeAccent, Colors.greenAccent],
+                      ).createShader(Offset.zero & bounds.size);
+                    },
+                    child: Text(_now,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        )),
                   )),
-            ),
-            Container(
-                decoration: BoxDecoration(color: Colors.white.withOpacity(0.1)),
-                alignment: Alignment.center,
-                margin: const EdgeInsets.fromLTRB(20, 70, 20, 0),
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                child: ShaderMask(
-                  shaderCallback: (Rect bounds) {
-                    return const LinearGradient(
-                      colors: [Colors.orangeAccent, Colors.greenAccent],
-                    ).createShader(Offset.zero & bounds.size);
-                  },
-                  child: Text(_now,
+              Container(
+                  decoration:
+                      BoxDecoration(color: Colors.white.withOpacity(0.1)),
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  child: ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return LinearGradient(
+                        colors: [Colors.orange.shade50, Colors.deepOrange],
+                      ).createShader(Offset.zero & bounds.size);
+                    },
+                    child: Text(_result,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        )),
+                  )),
+              Container(
+                  decoration:
+                      BoxDecoration(color: Colors.white.withOpacity(0.1)),
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  child: ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return const LinearGradient(
+                        colors: [Colors.lightBlueAccent, Colors.purpleAccent],
+                      ).createShader(Offset.zero & bounds.size);
+                    },
+                    child: Text(
+                      _desc,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
-                      )),
-                )),
-            Container(
-                decoration: BoxDecoration(color: Colors.white.withOpacity(0.1)),
-                alignment: Alignment.center,
-                margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                child: ShaderMask(
-                  shaderCallback: (Rect bounds) {
-                    return LinearGradient(
-                      colors: [Colors.orange.shade50, Colors.deepOrange],
-                    ).createShader(Offset.zero & bounds.size);
-                  },
-                  child: Text(_result,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      )),
-                )),
-            Container(
-                decoration: BoxDecoration(color: Colors.white.withOpacity(0.1)),
-                alignment: Alignment.center,
-                margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                child: ShaderMask(
-                  shaderCallback: (Rect bounds) {
-                    return const LinearGradient(
-                      colors: [Colors.lightBlueAccent, Colors.purpleAccent],
-                    ).createShader(Offset.zero & bounds.size);
-                  },
-                  child: Text(
-                    _desc,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
+                      ),
                     ),
-                  ),
-                )),
-            Container(
-              margin: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+                  )),
+            ]),
+            Positioned(
+              left: 100,
+              right: 100,
+              bottom: 150,
               child: FilledButton(
                 onPressed: _calculate,
                 style: ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll(
-                        Colors.deepPurple.withOpacity(0.9)),
+                        Colors.deepPurpleAccent.withOpacity(0.8)),
                     alignment: Alignment.center,
                     padding: const MaterialStatePropertyAll(
-                        EdgeInsets.fromLTRB(80, 12, 80, 12))),
+                        EdgeInsets.fromLTRB(0, 12, 0, 12))
+                ),
                 child: const Text('测算',
                     style: TextStyle(color: Colors.white, fontSize: 20)),
               ),
