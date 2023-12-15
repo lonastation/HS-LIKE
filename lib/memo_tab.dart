@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hs_like/memo_info_tab.dart';
+import 'package:hs_like/memo_type_tab.dart';
 
 class MemoTab extends StatefulWidget {
   const MemoTab({super.key});
@@ -33,8 +35,18 @@ class _MemoTabState extends State<MemoTab> {
               });
             },
           ),
-          Text('2023-12-01 mc2'),
-          Text('2023-11-26 unit'),
+          const SizedBox(
+            width: 250,
+            child: TextField(
+              obscureText: true,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(), labelText: 'everything'),
+            ),
+          ),
+          ElevatedButton(onPressed: () {}, child: const Text('Go')),
+          const Text('2023-12-01'),
+          const Text('description'),
+          ElevatedButton(onPressed: () {}, child: const Text('Edit')),
         ],
       ),
       floatingActionButton: Wrap(
@@ -43,14 +55,26 @@ class _MemoTabState extends State<MemoTab> {
           Container(
             margin: const EdgeInsets.all(10),
             child: FloatingActionButton(
-              onPressed: () {},
+              heroTag: 'memo-type',
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const MemoTypeTab()));
+              },
               child: const Icon(Icons.settings),
             ),
           ),
           Container(
             margin: const EdgeInsets.all(10),
             child: FloatingActionButton(
-              onPressed: () {},
+              heroTag: 'memo-info',
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const MemoInfoTab()));
+              },
               child: const Icon(Icons.add),
             ),
           )
