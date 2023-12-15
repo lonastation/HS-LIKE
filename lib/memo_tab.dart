@@ -21,32 +21,89 @@ class _MemoTabState extends State<MemoTab> {
     return Scaffold(
       body: ListView(
         children: <Widget>[
-          DropdownButton<String>(
-            value: dropdownValue,
-            items: list.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (String? value) {
-              setState(() {
-                dropdownValue = value!;
-              });
-            },
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Wrap(spacing: 10, children: [
+                DropdownButton<String>(
+                  value: dropdownValue,
+                  items: list.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? value) {
+                    setState(() {
+                      dropdownValue = value!;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  width: 150,
+                  child: TextField(
+                    obscureText: true,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(), labelText: 'everything'),
+                  ),
+                ),
+              ]),
+              ElevatedButton(onPressed: () {}, child: const Text('Go')),
+            ],
           ),
-          const SizedBox(
-            width: 250,
-            child: TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(), labelText: 'everything'),
-            ),
+          const Wrap(
+            children: [
+              Chip(
+                label: Text('unit'),
+                backgroundColor: Colors.purpleAccent,
+                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              ),
+              Chip(
+                label: Text('mc2'),
+                backgroundColor: Colors.deepPurple,
+                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              ),
+            ],
           ),
-          ElevatedButton(onPressed: () {}, child: const Text('Go')),
-          const Text('2023-12-01'),
-          const Text('description'),
-          ElevatedButton(onPressed: () {}, child: const Text('Edit')),
+          Wrap(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('2023-12-01'),
+                  Wrap(
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {}, child: const Text('Del')),
+                      ElevatedButton(
+                          onPressed: () {}, child: const Text('Edit')),
+                    ],
+                  ),
+                ],
+              ),
+              const Row(
+                children: [
+                  Expanded(
+                      child: Text(
+                          'description about hs, who, where, how, what, everything can be recorded here'))
+                ],
+              ),
+              const Wrap(
+                children: [
+                  Chip(
+                    label: Text('unit'),
+                    backgroundColor: Colors.amberAccent,
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  ),
+                  Chip(
+                    label: Text('mc2'),
+                    backgroundColor: Colors.lightBlueAccent,
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  ),
+                ],
+              )
+            ],
+          ),
         ],
       ),
       floatingActionButton: Wrap(
