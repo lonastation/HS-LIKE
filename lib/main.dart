@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'APP title',
+      title: 'HS-LIKE',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -61,7 +61,7 @@ class _BottomNavBarBoxState extends State<BottomNavBox> {
         selectedLabelStyle: const TextStyle(fontSize: 14),
         showSelectedLabels: true,
         showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
+        type: BottomNavigationBarType.shifting,
       ),
     );
   }
