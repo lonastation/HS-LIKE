@@ -9,18 +9,73 @@ Heartbeat is an area that cannot be divined
 
 # timeline
 
+## func
+
 1. add/update/delete
 
 date: yyyy-MM-dd
 
-stage: 16人, unit, mc2, mc3, mc4;
+type: 公演/口袋/微博/抖音/小红书/b站;
 
-platform: 公演/口袋/微博/抖音/小红书/b站;
+tag: 16, unit, mc2, mc3, mc4;
 
 desc;
 
+- 从文本自动匹配tag，不支持自选tag；
+
+- 每个平台对应不同的tag列表；
+
 2. list/search/order
 
-日期范围，单选平台，文本模糊匹配；
+日期范围，单选平台，文本模糊匹配，单选tag；
 
 默认按日期降序，可切换升降序；
+
+同一天可创建多条，分开显示；
+
+3. type-tag crud
+
+存在关联记录的 type-tag 不能删除, 可以编辑;
+
+## db
+
+1. type
+
+```sql
+create table(
+id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+title TEXT NOT NULL
+);
+```
+
+2. tag
+
+```sql
+create table(
+id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+type_id INT NOT NULL,
+title TEXT NOT NULL
+);
+```
+
+3. memo
+
+```sql
+create table(
+id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+occur_date TEXT NOT NULL,
+type_id INT NOT NULL,
+memo TEXT NOT NULL
+);
+```
+
+4. memo_tag
+
+```sql
+create table(
+id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+memo_id INT NOT NULL,
+tag_id TEXT NOT NULL
+);
+```
+
