@@ -1,8 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+
+final database = initDB();
 
 Future<Database> initDB() async {
   String dbPath = await getDatabasesPath();
@@ -16,8 +17,8 @@ Future<Database> initDB() async {
     onCreate: (db, version) {
       // Run the CREATE TABLE statement on the database.
       return db.execute(
-        'CREATE TABLE IF NOT EXISTS memo(id INTEGER PRIMARY KEY AUTOINCREMENT, type_id INTEGER, occur_date TEXT,memo TEXT);'
-        'CREATE TABLE IF NOT EXISTS type(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT);'
+        'CREATE TABLE IF NOT EXISTS memo(id INTEGER PRIMARY KEY AUTOINCREMENT, type_id INTEGER, occur_date TEXT,content TEXT);'
+        'CREATE TABLE IF NOT EXISTS memo_type(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT);'
         'CREATE TABLE IF NOT EXISTS tag(id INTEGER PRIMARY KEY AUTOINCREMENT, type_id INTEGER, title TEXT);'
         'CREATE TABLE IF NOT EXISTS memo_tag(id INTEGER PRIMARY KEY AUTOINCREMENT, memo_id INTEGER, tag_id INTEGER);',
       );
@@ -29,84 +30,159 @@ Future<Database> initDB() async {
 }
 
 Future<void> insertMemo(Memo memo) async {
-  final db = await initDB();
-  await db.insert('memo', memo.toMap(),
+  final db = await database;
+  int memoId = await db.insert('memo', memo.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace);
+  final List<Map<String, dynamic>> tags =
+      await db.query('tag', where: 'type_id=?', whereArgs: [memo.typeId]);
+  if (tags.isEmpty) {
+    return;
+  }
+  // memo_tag
+  for (var tag in tags) {
+    if (memo.content.contains(tag['title'])) {
+      await db.insert('memo_tag', {'memo_id': memoId, 'tag_id': tag['id']},
+          conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+  }
 }
 
 Future<List<Memo>> listMemo() async {
-  final db = await initDB();
+  final db = await database;
   final List<Map<String, dynamic>> maps = await db.query('memo');
   return List.generate(maps.length, (index) {
     return Memo.full(
       id: maps[index]['id'] as int,
       typeId: maps[index]['type_id'] as int,
       occurDate: maps[index]['occur_date'] as String,
-      memo: maps[index]['memo'] as String,
+      content: maps[index]['content'] as String,
     );
   });
 }
 
 Future<void> updateMemo(Memo memo) async {
-  final db = await initDB();
+  final db = await database;
   await db.update('memo', memo.toMap(), where: 'id=?', whereArgs: [memo.id]);
+  // clean memo_tag
+  await db.execute('delete from memo_tag where memo_id=?', [memo.id]);
+  final List<Map<String, dynamic>> tags =
+      await db.query('tag', where: 'type_id=?', whereArgs: [memo.typeId]);
+  if (tags.isEmpty) {
+    return;
+  }
+  // generate memo_tag
+  for (var tag in tags) {
+    if (memo.content.contains(tag['title'])) {
+      await db.insert('memo_tag', {'memo_id': memo.id, 'tag_id': tag['id']},
+          conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+  }
 }
 
 Future<void> deleteMemo(int? id) async {
   if (id == null) {
     return;
   }
-  final db = await initDB();
+  final db = await database;
   await db.delete('memo', where: 'id=?', whereArgs: [id]);
 }
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+Future<void> insertType(MemoType type) async {
+  final db = await database;
+  List<Map<String, dynamic>> exist =
+      await db.query('memo_type', where: 'title=?', whereArgs: [type.title]);
+  if (exist.isNotEmpty) {
+    return;
+  }
+  await db.insert('memo_type', type.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace);
+}
 
-  var fido = Memo(typeId: 0, occurDate: '2023-11-16', memo: 'zx ky');
+Future<List<MemoType>> listType() async {
+  final db = await database;
+  final List<Map<String, dynamic>> maps = await db.query('memo_type');
+  return List.generate(maps.length, (index) {
+    return MemoType.full(
+        id: maps[index]['id'] as int, title: maps[index]['title'] as String);
+  });
+}
 
-  await insertMemo(fido);
+Future<void> updateType(MemoType type) async {
+  final db = await database;
+  List<Map<String, dynamic>> exist =
+      await db.query('memo_type', where: 'title=?', whereArgs: [type.title]);
+  if (exist.isNotEmpty) {
+    return;
+  }
+  await db
+      .update('memo_type', type.toMap(), where: 'id=?', whereArgs: [type.id]);
+}
 
-  List<Memo> ms = await listMemo();
-  print(ms);
-  print(ms[0].toMap());
+Future<void> deleteType(MemoType type) async {
+  final db = await database;
+  List<Map<String, dynamic>> exist =
+      await db.query('memo', where: 'type_id=?', whereArgs: [type.id]);
+  if (exist.isNotEmpty) {
+    return;
+  }
+  await db.delete('tag', where: 'type_id=?', whereArgs: [type.id]);
+  await db.delete('memo_type', where: 'id=?', whereArgs: [type.id]);
+}
 
-  var updateM = ms[0];
-  updateM.memo = 'zx ky tango unit';
-  await updateMemo(updateM);
+Future<void> insertTag(Tag tag) async {
+  final db = await database;
+  List<Map<String, dynamic>> exist = await db.query('tag',
+      where: 'type_id=? and title=?', whereArgs: [tag.typeId, tag.title]);
+  if (exist.isNotEmpty) {
+    return;
+  }
+  await db.insert('tag', tag.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace);
+}
 
-  ms = await listMemo();
-  print(ms[0].toMap());
-
-  await (deleteMemo(ms[0].id));
+Future<List<Tag>> listTag(int typeId) async {
+  final db = await database;
+  final List<Map<String, dynamic>> maps =
+      await db.query('tag', where: 'type_id=?', whereArgs: [typeId]);
+  return List.generate(maps.length, (index) {
+    return Tag.full(
+        id: maps[index]['id'],
+        typeId: maps[index]['type_id'],
+        title: maps[index]['title']);
+  });
 }
 
 class Memo {
   int? id;
   int typeId;
   String occurDate;
-  String memo;
+  String content;
 
   Memo({
     required this.typeId,
     required this.occurDate,
-    required this.memo,
+    required this.content,
   });
 
   Memo.full({
     this.id,
     required this.typeId,
     required this.occurDate,
-    required this.memo,
+    required this.content,
   });
 
   Map<String, dynamic> toMap() {
-    return {'id': id, 'type_id': typeId, 'memo': memo, 'occur_date': occurDate};
+    return {
+      'id': id,
+      'type_id': typeId,
+      'content': content,
+      'occur_date': occurDate
+    };
   }
 
   @override
   String toString() {
-    return 'Memo{id: $id, typeId: $typeId, occurDate: $occurDate, memo: $memo}';
+    return 'Memo{id: $id, typeId: $typeId, occurDate: $occurDate, content: $content}';
   }
 }
 

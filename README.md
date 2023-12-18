@@ -39,10 +39,10 @@ desc;
 
 ## db
 
-1. type
+1. memo_type
 
 ```sql
-create table type(
+create table memo_type(
 id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 title TEXT NOT NULL
 );
@@ -65,7 +65,7 @@ create table memo(
 id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 occur_date TEXT NOT NULL,
 type_id INTEGER NOT NULL,
-memo TEXT NOT NULL
+content TEXT NOT NULL
 );
 ```
 
