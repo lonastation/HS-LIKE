@@ -42,8 +42,8 @@ desc;
 1. type
 
 ```sql
-create table(
-id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+create table type(
+id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 title TEXT NOT NULL
 );
 ```
@@ -51,9 +51,9 @@ title TEXT NOT NULL
 2. tag
 
 ```sql
-create table(
-id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-type_id INT NOT NULL,
+create table tag(
+id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+type_id INTEGER NOT NULL,
 title TEXT NOT NULL
 );
 ```
@@ -61,10 +61,10 @@ title TEXT NOT NULL
 3. memo
 
 ```sql
-create table(
-id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+create table memo(
+id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 occur_date TEXT NOT NULL,
-type_id INT NOT NULL,
+type_id INTEGER NOT NULL,
 memo TEXT NOT NULL
 );
 ```
@@ -72,9 +72,9 @@ memo TEXT NOT NULL
 4. memo_tag
 
 ```sql
-create table(
-id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-memo_id INT NOT NULL,
+create table memo_tag(
+id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+memo_id INTEGER NOT NULL,
 tag_id TEXT NOT NULL
 );
 ```
