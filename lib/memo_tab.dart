@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hs_like/memo_info_tab.dart';
+import 'package:hs_like/memo_repo.dart';
 import 'package:hs_like/memo_type_tab.dart';
+import 'dart:developer' as developer;
 
 class MemoTab extends StatefulWidget {
   const MemoTab({super.key});
@@ -11,10 +13,85 @@ class MemoTab extends StatefulWidget {
   }
 }
 
-const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
-
 class _MemoTabState extends State<MemoTab> {
-  String dropdownValue = list.first;
+  MemoType? selectedType;
+  List<MemoType> types = <MemoType>[];
+  List<Tag> tags = <Tag>[];
+  List<Memo> memos = <Memo>[];
+
+  Future<void> _fetchData() async {
+    types = await listType();
+    if (types.isNotEmpty) {
+      selectedType = types.first;
+    }
+    tags = await listTag(selectedType?.id);
+    memos = await listMemo();
+    developer.log(types.join(','), name: 'memo tab');
+    developer.log(tags.join(','), name: 'memo tab');
+    developer.log(memos.join(','), name: 'memo tab');
+  }
+
+  List<Chip> _generateTags() {
+    if (tags.isEmpty) {
+      return List.empty();
+    }
+    return tags.map((e) {
+      return Chip(
+        label: Text(e.title),
+        backgroundColor: Colors.lightBlueAccent,
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      );
+    }).toList();
+  }
+
+  List<Chip> _generateMemoTags(List<String> tagNames) {
+    if (tagNames.isEmpty) {
+      return List.empty();
+    }
+    return tagNames.map((name) {
+      return Chip(
+        label: Text(name),
+        backgroundColor: Colors.lightBlueAccent,
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      );
+    }).toList();
+  }
+
+  List<Wrap> _generateMemos() {
+    if (memos.isEmpty) {
+      return List.empty();
+    }
+    return memos.map((e) {
+      return Wrap(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(e.occurDate),
+              Wrap(
+                children: [
+                  ElevatedButton(onPressed: () {}, child: const Text('Del')),
+                  ElevatedButton(onPressed: () {}, child: const Text('Edit')),
+                ],
+              ),
+            ],
+          ),
+          Row(
+            children: [Expanded(child: Text(e.content))],
+          ),
+          Wrap(
+            children: _generateMemoTags(e.tags),
+          )
+        ],
+      );
+    }).toList();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +102,18 @@ class _MemoTabState extends State<MemoTab> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Wrap(spacing: 10, children: [
-                DropdownButton<String>(
-                  value: dropdownValue,
-                  items: list.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
+                DropdownButton<MemoType>(
+                  value: selectedType,
+                  items:
+                      types.map<DropdownMenuItem<MemoType>>((MemoType value) {
+                    return DropdownMenuItem<MemoType>(
                       value: value,
-                      child: Text(value),
+                      child: Text(value.title),
                     );
                   }).toList(),
-                  onChanged: (String? value) {
+                  onChanged: (MemoType? value) {
                     setState(() {
-                      dropdownValue = value!;
+                      selectedType = value!;
                     });
                   },
                 ),
@@ -51,58 +129,11 @@ class _MemoTabState extends State<MemoTab> {
               ElevatedButton(onPressed: () {}, child: const Text('Go')),
             ],
           ),
-          const Wrap(
-            children: [
-              Chip(
-                label: Text('unit'),
-                backgroundColor: Colors.purpleAccent,
-                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              ),
-              Chip(
-                label: Text('mc2'),
-                backgroundColor: Colors.deepPurple,
-                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              ),
-            ],
+          Wrap(
+            children: _generateTags(),
           ),
           Wrap(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('2023-12-01'),
-                  Wrap(
-                    children: [
-                      ElevatedButton(
-                          onPressed: () {}, child: const Text('Del')),
-                      ElevatedButton(
-                          onPressed: () {}, child: const Text('Edit')),
-                    ],
-                  ),
-                ],
-              ),
-              const Row(
-                children: [
-                  Expanded(
-                      child: Text(
-                          'description about hs, who, where, how, what, everything can be recorded here'))
-                ],
-              ),
-              const Wrap(
-                children: [
-                  Chip(
-                    label: Text('unit'),
-                    backgroundColor: Colors.amberAccent,
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  ),
-                  Chip(
-                    label: Text('mc2'),
-                    backgroundColor: Colors.lightBlueAccent,
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  ),
-                ],
-              )
-            ],
+            children: _generateMemos(),
           ),
         ],
       ),

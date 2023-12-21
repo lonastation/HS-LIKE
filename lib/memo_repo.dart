@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:collection/collection.dart';
+import 'dart:developer' as developer;
 
 Future<Database> initDB() async {
   String dbPath = await getDatabasesPath();
-  print(dbPath);
+  developer.log(dbPath, name: 'sqlite');
   return openDatabase(
     // Set the path to the database. Note: Using the `join` function from the
     // `path` package is best practice to ensure the path is correctly
@@ -179,7 +180,7 @@ class Memo {
   int typeId;
   String occurDate;
   String content;
-  List<String>? tags;
+  List<String> tags = <String>[];
 
   Memo({
     required this.typeId,
