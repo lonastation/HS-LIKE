@@ -1,8 +1,9 @@
+import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
 import 'package:hs_like/memo_info_tab.dart';
 import 'package:hs_like/memo_repo.dart';
 import 'package:hs_like/memo_type_tab.dart';
-import 'dart:developer' as developer;
 
 class MemoTab extends StatefulWidget {
   const MemoTab({super.key});
@@ -15,33 +16,11 @@ class MemoTab extends StatefulWidget {
 
 class _MemoTabState extends State<MemoTab> {
   MemoType? selectedType;
-  List<MemoType> types = <MemoType>[];
-  List<Tag> tags = <Tag>[];
   List<Memo> memos = <Memo>[];
 
   Future<void> _fetchData() async {
-    types = await listType();
-    if (types.isNotEmpty) {
-      selectedType = types.first;
-    }
-    tags = await listTag(selectedType?.id);
     memos = await listMemo();
-    developer.log(types.join(','), name: 'memo tab');
-    developer.log(tags.join(','), name: 'memo tab');
     developer.log(memos.join(','), name: 'memo tab');
-  }
-
-  List<Chip> _generateTags() {
-    if (tags.isEmpty) {
-      return List.empty();
-    }
-    return tags.map((e) {
-      return Chip(
-        label: Text(e.title),
-        backgroundColor: Colors.lightBlueAccent,
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      );
-    }).toList();
   }
 
   List<Chip> _generateMemoTags(List<String> tagNames) {
@@ -57,40 +36,110 @@ class _MemoTabState extends State<MemoTab> {
     }).toList();
   }
 
-  List<Wrap> _generateMemos() {
-    if (memos.isEmpty) {
-      return List.empty();
-    }
-    return memos.map((e) {
-      return Wrap(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(e.occurDate),
-              Wrap(
+  FutureBuilder<List<Memo>> _generateMemos() {
+    return FutureBuilder<List<Memo>>(
+      future: Future<List<Memo>>(() => listMemo()),
+      builder: (BuildContext context, AsyncSnapshot<List<Memo>> snapshot) {
+        if (snapshot.hasData) {
+          return Wrap(
+            children: snapshot.data!.map((e) {
+              return Wrap(
                 children: [
-                  ElevatedButton(onPressed: () {}, child: const Text('Del')),
-                  ElevatedButton(onPressed: () {}, child: const Text('Edit')),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(e.occurDate),
+                      Wrap(
+                        children: [
+                          ElevatedButton(
+                              onPressed: () {}, child: const Text('Del')),
+                          ElevatedButton(
+                              onPressed: () {}, child: const Text('Edit')),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [Expanded(child: Text(e.content))],
+                  ),
+                  Wrap(
+                    children: _generateMemoTags(e.tags),
+                  )
                 ],
-              ),
-            ],
-          ),
-          Row(
-            children: [Expanded(child: Text(e.content))],
-          ),
-          Wrap(
-            children: _generateMemoTags(e.tags),
-          )
-        ],
-      );
-    }).toList();
+              );
+            }).toList(),
+          );
+        }
+        return const Wrap(
+          children: [Text('no data')],
+        );
+      },
+    );
+  }
+
+  FutureBuilder<List<Tag>> _generateTags() {
+    return FutureBuilder<List<Tag>>(
+      future: Future<List<Tag>>(() => listTag(selectedType?.id)),
+      builder: (BuildContext context, AsyncSnapshot<List<Tag>> snapshot) {
+        if (snapshot.hasData) {
+          return Wrap(
+              children: snapshot.data!.map<Chip>((e) {
+            return Chip(
+              label: Text(e.title),
+              backgroundColor: Colors.lightBlueAccent,
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            );
+          }).toList());
+        }
+        return const Wrap();
+      },
+    );
+  }
+
+  FutureBuilder<List<MemoType>> _generateTypes() {
+    return FutureBuilder<List<MemoType>>(
+      future: Future<List<MemoType>>(() => listType()),
+      builder: (BuildContext context, AsyncSnapshot<List<MemoType>> snapshot) {
+        if (snapshot.hasData) {
+          return DropdownButton<MemoType>(
+            value: _setSelectedType(snapshot),
+            items: snapshot.data!
+                .map<DropdownMenuItem<MemoType>>((MemoType value) {
+              return DropdownMenuItem<MemoType>(
+                value: value,
+                child: Text(value.title),
+              );
+            }).toList(),
+            onChanged: (MemoType? value) {
+              setState(() {
+                selectedType = value!;
+              });
+            },
+          );
+        }
+        return DropdownButton<MemoType>(
+          value: selectedType,
+          items: List.empty(),
+          onChanged: (MemoType? value) {},
+        );
+      },
+    );
+  }
+
+  MemoType? _setSelectedType(AsyncSnapshot<List<MemoType>> snapshot) {
+    if (snapshot.hasData) {
+      selectedType = snapshot.data?.first;
+      return selectedType;
+    }
+    return MemoType(title: '-');
   }
 
   @override
   void initState() {
     super.initState();
-    _fetchData();
+    setState(() {
+      _fetchData();
+    });
   }
 
   @override
@@ -102,21 +151,7 @@ class _MemoTabState extends State<MemoTab> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Wrap(spacing: 10, children: [
-                DropdownButton<MemoType>(
-                  value: selectedType,
-                  items:
-                      types.map<DropdownMenuItem<MemoType>>((MemoType value) {
-                    return DropdownMenuItem<MemoType>(
-                      value: value,
-                      child: Text(value.title),
-                    );
-                  }).toList(),
-                  onChanged: (MemoType? value) {
-                    setState(() {
-                      selectedType = value!;
-                    });
-                  },
-                ),
+                _generateTypes(),
                 const SizedBox(
                   width: 150,
                   child: TextField(
@@ -129,12 +164,8 @@ class _MemoTabState extends State<MemoTab> {
               ElevatedButton(onPressed: () {}, child: const Text('Go')),
             ],
           ),
-          Wrap(
-            children: _generateTags(),
-          ),
-          Wrap(
-            children: _generateMemos(),
-          ),
+          _generateTags(),
+          _generateMemos(),
         ],
       ),
       floatingActionButton: Wrap(
