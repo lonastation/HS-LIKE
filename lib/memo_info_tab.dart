@@ -20,8 +20,10 @@ class _MemoInfoTabState extends State<MemoInfoTab> {
       appBar: AppBar(
         title: const Text('Memo Detail'),
       ),
+      resizeToAvoidBottomInset: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
             margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -32,7 +34,7 @@ class _MemoInfoTabState extends State<MemoInfoTab> {
                   child: TextField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'when',
+                      labelText: 'date only, yyyy-MM-dd',
                     ),
                   ),
                 ),
@@ -66,12 +68,34 @@ class _MemoInfoTabState extends State<MemoInfoTab> {
             ),
           ),
           Container(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 2),
+            // alignment: Alignment.centerLeft,
             child: const Text('what happened?'),
           ),
           Container(
-            margin: const EdgeInsets.fromLTRB(20, 10, 20, 40),
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: const Wrap(
+              children: [
+                Chip(
+                  label: Text('公演'),
+                  backgroundColor: Colors.deepPurpleAccent,
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                ),
+                Chip(
+                  label: Text('抖音'),
+                  backgroundColor: Colors.deepPurpleAccent,
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                ),
+                Chip(
+                  label: Text('小红书'),
+                  backgroundColor: Colors.deepPurpleAccent,
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.fromLTRB(20, 16, 20, 40),
             child: const Row(
               children: [
                 Expanded(
@@ -85,12 +109,12 @@ class _MemoInfoTabState extends State<MemoInfoTab> {
               ],
             ),
           ),
-          Row(
-            children: [
-              Expanded(
+          Container(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Expanded(
                   child: ElevatedButton(
                       onPressed: () {}, child: const Text('Submit')))
-            ],
+            ,
           ),
         ],
       ),
