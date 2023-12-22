@@ -128,7 +128,9 @@ class _MemoTabState extends State<MemoTab> {
 
   MemoType? _setSelectedType(AsyncSnapshot<List<MemoType>> snapshot) {
     if (snapshot.hasData) {
-      selectedType = snapshot.data?.first;
+      if (snapshot.data!.isNotEmpty) {
+        selectedType = snapshot.data!.first;
+      }
       return selectedType;
     }
     return MemoType(title: '-');
