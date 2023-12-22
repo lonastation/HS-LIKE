@@ -20,56 +20,78 @@ class _MemoInfoTabState extends State<MemoInfoTab> {
       appBar: AppBar(
         title: const Text('Memo Detail'),
       ),
-      body: ListView(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Row(
-            children: [
-              SizedBox(width: 100, child: Text('when')),
-              Expanded(
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'when',
+          Container(
+            margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+            child: const Row(
+              children: [
+                SizedBox(width: 80, child: Text('when')),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'when',
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+            child: Row(
+              children: [
+                const SizedBox(width: 80, child: Text('type')),
+                Expanded(
+                    child: DropdownButton<String>(
+                  value: dropdownValue,
+                  icon: const Icon(Icons.arrow_downward),
+                  itemHeight: 70,
+                  items: list.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? value) {
+                    // This is called when the user selects an item.
+                    setState(() {
+                      dropdownValue = value!;
+                    });
+                  },
+                ))
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+            alignment: Alignment.centerLeft,
+            child: const Text('what happened?'),
+          ),
+          Container(
+            margin: const EdgeInsets.fromLTRB(20, 10, 20, 40),
+            child: const Row(
+              children: [
+                Expanded(
+                    child: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'say something about hs please...',
+                  ),
+                  maxLines: null,
+                ))
+              ],
+            ),
           ),
           Row(
             children: [
-              SizedBox(width: 100, child: Text('type')),
               Expanded(
-                  child: DropdownButton<String>(
-                value: dropdownValue,
-                icon: const Icon(Icons.arrow_downward),
-                items: list.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? value) {
-                  // This is called when the user selects an item.
-                  setState(() {
-                    dropdownValue = value!;
-                  });
-                },
-              ))
+                  child: ElevatedButton(
+                      onPressed: () {}, child: const Text('Submit')))
             ],
           ),
-          Row(
-            children: [
-              Expanded(
-                  child: TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'what',
-                ),
-                maxLines: null,
-              ))
-            ],
-          ),
-          ElevatedButton(onPressed: () {}, child: Text('Submit'))
         ],
       ),
     );
