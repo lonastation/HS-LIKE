@@ -173,6 +173,11 @@ Future<void> deleteTag(int tagId) async {
   await db.delete('tag', where: 'id=?', whereArgs: [tagId]);
 }
 
+Future<void> updateTag(Tag tag) async {
+  final db = await initDB();
+  await db.update('tag', tag.toMap(), where: 'id=?', whereArgs: [tag.id]);
+}
+
 Future<List<Tag>> listTag(int? typeId) async {
   if (typeId == null) {
     return List.empty();

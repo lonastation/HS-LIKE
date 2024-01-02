@@ -26,12 +26,14 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
                 Text(e.title),
                 Wrap(
                   children: [
-                    ElevatedButton(onPressed: () {
-                      setState(() {
-                        deleteTag(e.id!);
-                      });
-                    }, child: const Text('Del')),
-                    ElevatedButton(onPressed: () {}, child: const Text('Edit')),
+                    ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            deleteTag(e.id!);
+                          });
+                        },
+                        child: const Text('Del')),
+                    _drawEditTagButton(e),
                   ],
                 )
               ],
@@ -55,6 +57,52 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
         );
       },
     );
+  }
+
+  ElevatedButton _drawEditTagButton(Tag t) {
+    final tagController = TextEditingController(text: t.title);
+    return ElevatedButton(
+        onPressed: () => showDialog(
+            context: context,
+            builder: (BuildContext context) => Dialog(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        TextField(
+                            controller: tagController,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'tag',
+                            )),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Cancel'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  t.title = tagController.text;
+                                  updateTag(t);
+                                  Navigator.pop(context);
+                                });
+                              },
+                              child: const Text('Submit'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                )),
+        child: const Text('Edit'));
   }
 
   ElevatedButton _drawAddTagButton() {
