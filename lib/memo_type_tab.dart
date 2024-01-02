@@ -13,7 +13,7 @@ class MemoTypeTab extends StatefulWidget {
 class _MemoTypeTabState extends State<MemoTypeTab> {
   MemoType? selectedType;
 
-  FutureBuilder<List<Tag>> _generateTags() {
+  FutureBuilder<List<Tag>> _drawTags() {
     return FutureBuilder<List<Tag>>(
       future: Future<List<Tag>>(() => listTag(selectedType?.id)),
       builder: (BuildContext context, AsyncSnapshot<List<Tag>> snapshot) {
@@ -35,9 +35,8 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
           }));
           tagsBox.add(Container(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: Expanded(
-                child: ElevatedButton(
-                    onPressed: () {}, child: const Icon(Icons.add))),
+            child: ElevatedButton(
+                onPressed: () {}, child: const Icon(Icons.add)),
           ));
           return Wrap(
             children: tagsBox,
@@ -47,9 +46,8 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
           children: [
             Container(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: Expanded(
-                  child: ElevatedButton(
-                      onPressed: () {}, child: const Icon(Icons.add))),
+              child: ElevatedButton(
+                  onPressed: () {}, child: const Icon(Icons.add)),
             )
           ],
         );
@@ -57,7 +55,8 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
     );
   }
 
-  ElevatedButton _generateAddTypeButton() {
+  ElevatedButton _drawAddTypeButton() {
+    final typeController = TextEditingController();
     return ElevatedButton(
         onPressed: () => showDialog(
             context: context,
@@ -68,11 +67,12 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        const TextField(
-                            decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'type',
-                        )),
+                        TextField(
+                            controller: typeController,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'type',
+                            )),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -84,7 +84,10 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                Navigator.pop(context);
+                                setState(() {
+                                  insertType(MemoType(title: typeController.text));
+                                  Navigator.pop(context);
+                                });
                               },
                               child: const Text('Submit'),
                             ),
@@ -103,7 +106,7 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
         child: const Icon(Icons.add));
   }
 
-  FutureBuilder<List<MemoType>> _generateTypes() {
+  FutureBuilder<List<MemoType>> _drawTypes() {
     return FutureBuilder<List<MemoType>>(
       future: Future<List<MemoType>>(() => listType()),
       builder: (BuildContext context, AsyncSnapshot<List<MemoType>> snapshot) {
@@ -121,13 +124,13 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
               },
             );
           }));
-          typesBox.add(_generateAddTypeButton());
+          typesBox.add(_drawAddTypeButton());
           return Wrap(
             children: typesBox,
           );
         }
         return Wrap(
-          children: [_generateAddTypeButton()],
+          children: [_drawAddTypeButton()],
         );
       },
     );
@@ -141,8 +144,8 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
       ),
       body: ListView(
         children: <Widget>[
-          _generateTypes(),
-          _generateTags(),
+          _drawTypes(),
+          _drawTags(),
         ],
       ),
     );

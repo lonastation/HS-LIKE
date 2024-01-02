@@ -108,6 +108,9 @@ Future<void> deleteMemo(int? id) async {
 }
 
 Future<void> insertType(MemoType type) async {
+  if (type.title.isEmpty) {
+    return;
+  }
   final db = await initDB();
   List<Map<String, dynamic>> exist =
       await db.query('memo_type', where: 'title=?', whereArgs: [type.title]);
