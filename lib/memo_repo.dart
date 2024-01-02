@@ -163,6 +163,16 @@ Future<void> insertTag(Tag tag) async {
       conflictAlgorithm: ConflictAlgorithm.replace);
 }
 
+Future<void> deleteTag(int tagId) async {
+  final db = await initDB();
+  List<Map<String, dynamic>> exist =
+      await db.query('memo_tag', where: 'tag_id=?', whereArgs: [tagId]);
+  if (exist.isNotEmpty) {
+    return;
+  }
+  await db.delete('tag', where: 'id=?', whereArgs: [tagId]);
+}
+
 Future<List<Tag>> listTag(int? typeId) async {
   if (typeId == null) {
     return List.empty();

@@ -26,7 +26,11 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
                 Text(e.title),
                 Wrap(
                   children: [
-                    ElevatedButton(onPressed: () {}, child: const Text('Del')),
+                    ElevatedButton(onPressed: () {
+                      setState(() {
+                        deleteTag(e.id!);
+                      });
+                    }, child: const Text('Del')),
                     ElevatedButton(onPressed: () {}, child: const Text('Edit')),
                   ],
                 )
