@@ -206,17 +206,15 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
       builder: (BuildContext context, AsyncSnapshot<List<MemoType>> snapshot) {
         if (snapshot.hasData) {
           List<Widget> typesBox = [];
-          typesBox.addAll(snapshot.data!.map<RawChip>((e) {
-            return RawChip(
+          typesBox.addAll(snapshot.data!.map<InputChip>((e) {
+            return InputChip(
               label: Text(e.title),
-              backgroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              selected: selectedType != null && selectedType!.id == e.id,
               onPressed: () {
                 setState(() {
                   selectedType = e;
                 });
               },
-              deleteIconColor: Colors.red,
               onDeleted: () {
                 setState(() {
                   deleteType(e);
