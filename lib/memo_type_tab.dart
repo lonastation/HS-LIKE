@@ -13,6 +13,61 @@ class MemoTypeTab extends StatefulWidget {
 class _MemoTypeTabState extends State<MemoTypeTab> {
   MemoType? selectedType;
 
+  Widget _drawType() {
+    if (selectedType == null) {
+      return const Text('select none type');
+    }
+    final typeController = TextEditingController(text: selectedType?.title);
+    return ElevatedButton(
+      onPressed: () => showDialog(
+          context: context,
+          builder: (BuildContext context) => Dialog(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  TextField(
+                      controller: typeController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'update type',
+                      )),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            if (selectedType != null) {
+                              MemoType temp = MemoType.full(
+                                id: selectedType!.id,
+                                title: typeController.text,
+                              );
+                              updateType(temp);
+                            }
+                            Navigator.pop(context);
+                          });
+                        },
+                        child: const Text('Submit'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )),
+      child: const Text('Edit Type Name'),
+    );
+  }
+
   FutureBuilder<List<Tag>> _drawTags() {
     return FutureBuilder<List<Tag>>(
       future: Future<List<Tag>>(() => listTag(selectedType?.id)),
@@ -243,6 +298,7 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
       body: ListView(
         children: <Widget>[
           _drawTypes(),
+          _drawType(),
           _drawTags(),
         ],
       ),
