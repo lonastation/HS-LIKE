@@ -80,7 +80,7 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              child: const Text('Delete'),
+                              child: const Text('Cancel'),
                             ),
                             ElevatedButton(
                               onPressed: () {
@@ -92,12 +92,6 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
                               child: const Text('Submit'),
                             ),
                           ],
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Cancel'),
                         ),
                       ],
                     ),
@@ -112,14 +106,20 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
       builder: (BuildContext context, AsyncSnapshot<List<MemoType>> snapshot) {
         if (snapshot.hasData) {
           List<Widget> typesBox = [];
-          typesBox.addAll(snapshot.data!.map<ActionChip>((e) {
-            return ActionChip(
+          typesBox.addAll(snapshot.data!.map<RawChip>((e) {
+            return RawChip(
               label: Text(e.title),
-              backgroundColor: Colors.deepPurpleAccent,
+              backgroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
               onPressed: () {
                 setState(() {
                   selectedType = e;
+                });
+              },
+              deleteIconColor: Colors.red,
+              onDeleted: () {
+                setState(() {
+                  deleteType(e);
                 });
               },
             );
