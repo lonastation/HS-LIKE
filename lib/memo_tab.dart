@@ -23,16 +23,17 @@ class _MemoTabState extends State<MemoTab> {
     developer.log(memos.join(','), name: 'memo tab');
   }
 
-  List<Chip> _generateMemoTags(List<String> tagNames) {
+  List<Padding> _generateMemoTags(List<String> tagNames) {
     if (tagNames.isEmpty) {
       return List.empty();
     }
     return tagNames.map((name) {
-      return Chip(
-        label: Text(name),
-        backgroundColor: Colors.lightBlueAccent,
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      );
+      return Padding(
+          padding: const EdgeInsets.fromLTRB(0, 4, 6, 4),
+          child: Text(
+            name,
+            style: const TextStyle(decoration: TextDecoration.underline),
+          ));
     }).toList();
   }
 
@@ -48,19 +49,31 @@ class _MemoTabState extends State<MemoTab> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(e.occurDate),
+                      Text(
+                        e.occurDate,
+                        style: const TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
                       Wrap(
                         children: [
-                          ElevatedButton(
+                          TextButton(
                               onPressed: () {}, child: const Text('Del')),
-                          ElevatedButton(
+                          TextButton(
                               onPressed: () {}, child: const Text('Edit')),
                         ],
                       ),
                     ],
                   ),
                   Row(
-                    children: [Expanded(child: Text(e.content))],
+                    children: [
+                      Expanded(
+                          child: Text(
+                        e.content,
+                        style: const TextStyle(
+                            color: Colors.deepPurpleAccent, fontSize: 20),
+                      ))
+                    ],
                   ),
                   Wrap(
                     children: _generateMemoTags(e.tags),
@@ -73,25 +86,6 @@ class _MemoTabState extends State<MemoTab> {
         return const Wrap(
           children: [Text('no data')],
         );
-      },
-    );
-  }
-
-  FutureBuilder<List<Tag>> _generateTags() {
-    return FutureBuilder<List<Tag>>(
-      future: Future<List<Tag>>(() => listTag(selectedType?.id)),
-      builder: (BuildContext context, AsyncSnapshot<List<Tag>> snapshot) {
-        if (snapshot.hasData) {
-          return Wrap(
-              children: snapshot.data!.map<Chip>((e) {
-            return Chip(
-              label: Text(e.title),
-              backgroundColor: Colors.lightBlueAccent,
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            );
-          }).toList());
-        }
-        return const Wrap();
       },
     );
   }
@@ -149,24 +143,31 @@ class _MemoTabState extends State<MemoTab> {
     return Scaffold(
       body: ListView(
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Wrap(spacing: 10, children: [
-                _generateTypes(),
-                const SizedBox(
-                  width: 150,
-                  child: TextField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(), labelText: 'everything'),
+          Container(
+            margin: const EdgeInsets.fromLTRB(10, 0, 10, 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Wrap(spacing: 10, children: [
+                  _generateTypes(),
+                  const SizedBox(
+                    width: 220,
+                    child: TextField(
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        border: UnderlineInputBorder(),
+                      ),
+                    ),
                   ),
-                ),
-              ]),
-              ElevatedButton(onPressed: () {}, child: const Text('Go')),
-            ],
+                ]),
+                TextButton(
+                    onPressed: () {},
+                    style: TextButton.styleFrom(
+                        textStyle: const TextStyle(fontSize: 20)),
+                    child: const Text('搜索')),
+              ],
+            ),
           ),
-          _generateTags(),
           _generateMemos(),
         ],
       ),

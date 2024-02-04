@@ -18,52 +18,55 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
       return const Text('select none type');
     }
     final typeController = TextEditingController(text: selectedType?.title);
-    return ElevatedButton(
+    return FilledButton(
+      style: FilledButton.styleFrom(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(0))),
       onPressed: () => showDialog(
           context: context,
           builder: (BuildContext context) => Dialog(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  TextField(
-                      controller: typeController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'update type',
-                      )),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Cancel'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            if (selectedType != null) {
-                              MemoType temp = MemoType.full(
-                                id: selectedType!.id,
-                                title: typeController.text,
-                              );
-                              updateType(temp);
-                            }
-                            Navigator.pop(context);
-                          });
-                        },
-                        child: const Text('Submit'),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      TextField(
+                          controller: typeController,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'update type',
+                          )),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                if (selectedType != null) {
+                                  MemoType temp = MemoType.full(
+                                    id: selectedType!.id,
+                                    title: typeController.text,
+                                  );
+                                  updateType(temp);
+                                }
+                                Navigator.pop(context);
+                              });
+                            },
+                            child: const Text('Submit'),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-          )),
+                ),
+              )),
       child: const Text('Edit Type Name'),
     );
   }
@@ -81,7 +84,7 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
                 Text(e.title),
                 Wrap(
                   children: [
-                    ElevatedButton(
+                    TextButton(
                         onPressed: () {
                           setState(() {
                             deleteTag(e.id!);
@@ -114,9 +117,9 @@ class _MemoTypeTabState extends State<MemoTypeTab> {
     );
   }
 
-  ElevatedButton _drawEditTagButton(Tag t) {
+  TextButton _drawEditTagButton(Tag t) {
     final tagController = TextEditingController(text: t.title);
-    return ElevatedButton(
+    return TextButton(
         onPressed: () => showDialog(
             context: context,
             builder: (BuildContext context) => Dialog(
